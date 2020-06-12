@@ -18,3 +18,10 @@
         <img src="http://img.shields.io/badge/swift-5.1-brightgreen.svg" alt="Swift 5.1">
     </a>
 </p>
+
+
+<b>Resources</b>
+1. Paul Hudson https://www.youtube.com/watch?v=pSgWwyj1gX4 
+2. SwiftyJimmy http://swiftyjimmy.com/server-side-swift-vapor/
+3. theswiftdev https://theswiftdev.com/beginners-guide-to-server-side-swift-using-vapor-4/ 😍
+4. theswiftdev server side swift vapo article https://theswiftdev.com/articles/
