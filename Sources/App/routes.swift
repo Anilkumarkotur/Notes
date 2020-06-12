@@ -2,16 +2,22 @@ import Vapor
 
 /// Register your application's routes here.
 public func routes(_ router: Router) throws {
+    
     // Basic "It works" example
-    router.get { req in
-        return "It works!"
+    router.get("notes") { req -> Response in
+        struct Note: Content {
+            let title: String
+            let descripation: String
+            let tag: Int
+            let body: String
+        }
+        
+        let response = Response(using: req)
+        try response.content.encode(Note(title: "First", descripation: "Is small", tag: 1, body: "Not for now"))
+        
+        return response
     }
     
-    // Basic "Hello, world!" example
-    router.get("hello") { req in
-        return "Hello, world!"
-    }
-
     // Example of configuring a controller
     let todoController = TodoController()
     router.get("todos", use: todoController.index)
