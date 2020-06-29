@@ -52,8 +52,18 @@ final class NoteController: RouteCollection {
             note.summery = updateedNote.summery
             note.createdAt = updateedNote.createdAt
             note.body = updateedNote.body
+            note.authorID = updateedNote.authorID
             
             return note.save(on: req)
         }
     }
+    
+    func showUser(req: Request) throws -> Future<User> {
+        return try req.parameters.next(Note.self).flatMap(to: User.self, { note in
+            return note.user.get(on: req)
+        })
+    }
 }
+
+/// 1. What is T?
+/// 2. What is future 
