@@ -32,6 +32,12 @@ final class Note: SQLiteModel {
     }
 }
 
+extension Note {
+    var user: Parent<Note, User> {
+        return parent(\.authorID)
+    }
+}
+
 /// Allows `Note` to be used as a dynamic migration.
 extension Note: Migration { }
 
@@ -40,10 +46,4 @@ extension Note: Content { }
 
 /// Allows `Note` to be used as a dynamic parameter in route definitions.
 extension Note: Parameter { }
-
-extension Note {
-    var user: Parent<Note, User> {
-        return parent(\.authorID)
-    }
-}
 

@@ -17,7 +17,7 @@ final class User: SQLiteModel {
     var emailID: String
     var phoneNumber: String
     
-    init(id: Int,
+    init(id: Int? = nil,
          name: String,
          profilePic: String,
          emailID: String,
@@ -31,6 +31,13 @@ final class User: SQLiteModel {
     }
 }
 
+extension User {
+
+    var notes: Children<User, Note> {
+        return children(\.authorID)
+    }
+}
+
 /// Allows `User` to be used as a dynamic migration.
 extension User: Migration { }
 /// Allows `User` to be encoded to and decoded from HTTP messages.
@@ -38,10 +45,5 @@ extension User: Content { }
 /// Allows `User` to be used as a dynamic parameter in route definitions.
 extension User: Parameter { }
 
-extension User {
-    
-    var notes: Children<User, Note> {
-        return children(\.authorID)
-    }
-}
+
 

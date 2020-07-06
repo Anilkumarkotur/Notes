@@ -12,10 +12,8 @@ final class UserController: RouteCollection {
     func boot(router: Router) throws {
         let userRouter = router.grouped("users")
         userRouter.get("/", use: index)
-        userRouter.get(User.parameter, use: show)
         userRouter.post("/", use: create)
         userRouter.get(User.parameter, "notes", use: showNotes)
-        //user/:id/notes
     }
     
     /// Returns a list of all `User`s.
@@ -23,15 +21,10 @@ final class UserController: RouteCollection {
         return User.query(on: req).all()
     }
     
-    /// Returns a parameterized `User`.
-    func show(_ req: Request) throws ->  Future<User> {
-        return try req.parameters.next(User.self)
-    }
-
     /// Saves a decoded `User` to the database.
     func create(_ req: Request) throws -> Future<User> {
         return try req.content.decode(User.self).flatMap { User in
-            return User.save(on: req)
+            return User.create(on: req)
         }
     }
     
@@ -41,4 +34,3 @@ final class UserController: RouteCollection {
         })
     }
 }
-

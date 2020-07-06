@@ -12,10 +12,12 @@ final class NoteController: RouteCollection {
     func boot(router: Router) throws {
         let noteRouter = router.grouped("notes")
         noteRouter.get("/", use: index)
-        noteRouter.get(Note.parameter, use: show)
         noteRouter.post("/", use: create)
+        noteRouter.get(Note.parameter, use: show)
         noteRouter.delete(Note.parameter, use: delete)
         noteRouter.patch(Note.parameter, use: update)
+        //notes/:id/user
+        noteRouter.get(Note.parameter, "user", use: showUser)
     }
     
     /// Returns a list of all `Note`s.
@@ -31,7 +33,8 @@ final class NoteController: RouteCollection {
     /// Saves a decoded `Note` to the database.
     func create(_ req: Request) throws -> Future<Note> {
         return try req.content.decode(Note.self).flatMap { Note in
-            return Note.save(on: req)
+            //#WARNING: need to verify the issue with create and save method
+            return Note.create(on: req)
         }
     }
 
