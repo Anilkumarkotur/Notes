@@ -18,15 +18,23 @@ final class Note: SQLiteModel {
     var createdAt: String /// reperents the date of creation of the note  : TODO: need to change to UNIX time stamp from string
     var summery: String /// reperents the little summer of the note
     var body: String /// reperents the whole note body
+    var authorID: User.ID
     
     /// Creates a new `Note`.
-    init(id: Int? = nil, title: String, tag: String, summery: String, createdAt: String, body: String) {
+    init(id: Int? = nil, title: String, tag: String, summery: String, createdAt: String, body: String, authorID: User.ID) {
         self.id = id
         self.title = title
         self.tag = tag
         self.createdAt = createdAt
         self.summery = summery
         self.body = body
+        self.authorID = authorID
+    }
+}
+
+extension Note {
+    var user: Parent<Note, User> {
+        return parent(\.authorID)
     }
 }
 

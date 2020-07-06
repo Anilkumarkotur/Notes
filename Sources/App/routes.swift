@@ -8,5 +8,11 @@ public func routes(_ router: Router) throws {
     try router.register(collection: noteController)
     router.get("notes", use: noteController.index)
     router.post("notes", use: noteController.create)
-    router.delete("notes", Note.parameter, use: noteController.delete)
+
+    
+    let userController = UserController()
+    try router.register(collection: userController)
+    router.get("users", use: userController.index)
+    router.post("users", use: userController.create)
+
 }
