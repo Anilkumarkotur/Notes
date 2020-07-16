@@ -7,6 +7,7 @@
 
 import Vapor
 import Crypto
+import Authentication
 
 /// Controls basic CRUD operations on `User`s.
 final class UserController: RouteCollection {
@@ -15,6 +16,16 @@ final class UserController: RouteCollection {
         userRouter.get("/", use: index)
         userRouter.post("/", use: create)
         userRouter.get(User.PublicUser.parameter, "notes", use: showNotes)
+        
+        let basicAuthMiddleWare = User.basicAuthMiddleware(using: BCryptDigest())
+        let authGroup = userRouter.grouped(basicAuthMiddleWare)
+        authGroup.post("login", use: loginHandler)
+    }
+    
+    func loginHandler(_ req: Request) throws -> Future<Token> {
+        let user = try req.requireAuthenticated(User.self)
+        let token = try Token(user)
+        return token.save(on: req)
     }
     
     /// Returns a list of all `User`s.
