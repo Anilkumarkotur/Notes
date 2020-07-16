@@ -34,6 +34,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var migrations = MigrationConfig()
     migrations.add(model: Note.self, database: .sqlite)
     migrations.add(model: User.self, database: .sqlite)
+    migrations.add(model: Token.self, database: .sqlite)
     services.register(migrations)
     User.PublicUser.defaultDatabase = .sqlite
 }

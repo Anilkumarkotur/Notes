@@ -7,6 +7,7 @@
 
 import FluentSQLite
 import Vapor
+import Authentication
 
 final class User: SQLiteModel {
     typealias Database = SQLiteDatabase
@@ -82,3 +83,12 @@ extension User: Migration { }
 extension User: Content { }
 /// Allows `User` to be used as a dynamic parameter in route definitions.
 extension User: Parameter { }
+extension User: BasicAuthenticatable {
+    static var usernameKey: UsernameKey {
+        return \User.name
+    }
+    
+    static var passwordKey: PasswordKey {
+        return \User.password
+    }
+}
