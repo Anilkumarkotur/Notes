@@ -25,3 +25,10 @@
 2. SwiftyJimmy http://swiftyjimmy.com/server-side-swift-vapor/
 3. theswiftdev https://theswiftdev.com/beginners-guide-to-server-side-swift-using-vapor-4/ 😍
 4. theswiftdev server side swift vapo article https://theswiftdev.com/articles/
+
+
+1. [Authentication](https://medium.com/swift2go/vapor-3-series-ii-authentication-ff17847a9659)
+2. [Working with Futures in Vapor 3](https://www.vaporforums.io/viewThread/45#:~:text=In%20Vapor%203%2C%20if%20you,Future%20.) 
+
+## What does this error mean?  
+1. UNIQUE constraint failed: User.id = creating user with duplicate id 
