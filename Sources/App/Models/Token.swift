@@ -24,10 +24,6 @@ final class Token: SQLiteModel {
     }
     
     init(_ user: User) throws {
-        /* TODO:
-         1. Replace with OSRandom().data(count: 16).base64EncodingString() - Done but test and verify
-         2. Check the is using the uuid is correct thing or not
-         */
         if let token = try? CryptoRandom().generateData(count: 16).base64EncodedString() {
             self.token = token
         } else {
