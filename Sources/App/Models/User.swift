@@ -83,6 +83,7 @@ extension User: Migration { }
 extension User: Content { }
 /// Allows `User` to be used as a dynamic parameter in route definitions.
 extension User: Parameter { }
+
 extension User: BasicAuthenticatable {
     static var usernameKey: UsernameKey {
         return \User.name
@@ -91,4 +92,8 @@ extension User: BasicAuthenticatable {
     static var passwordKey: PasswordKey {
         return \User.password
     }
+}
+
+extension User: TokenAuthenticatable {
+    typealias TokenType = Token
 }

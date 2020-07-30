@@ -20,12 +20,21 @@ final class UserController: RouteCollection {
         let basicAuthMiddleWare = User.basicAuthMiddleware(using: BCryptDigest())
         let authGroup = userRouter.grouped(basicAuthMiddleWare)
         authGroup.post("login", use: loginHandler)
+        
+        let tokenAuthMiddleWare = User.tokenAuthMiddleware()
+        let tokenGroup = userRouter.grouped(tokenAuthMiddleWare)
+        tokenGroup.get("notes", use: handleUserNotes)
     }
     
     func loginHandler(_ req: Request) throws -> Future<Token> {
         let user = try req.requireAuthenticated(User.self)
         let token = try Token(user)
-        return token.save(on: req)
+        return token.create(on: req)
+    }
+    
+    func handleUserNotes(_ req: Request) throws -> Future<[Note]> {
+        let user = try req.requireAuthenticated(User.self)
+        return try user.notes.query(on: req).all()
     }
     
     /// Returns a list of all `User`s.
@@ -45,8 +54,6 @@ final class UserController: RouteCollection {
                 return publicUser
             }
         })
-        
-
     }
     
     func showNotes(_ req: Request) throws -> Future<[Note]> {
