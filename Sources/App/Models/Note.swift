@@ -32,6 +32,14 @@ final class Note: SQLiteModel {
     }
 }
 
+struct NoteData: Content {
+    var title: String /// A title describing what this `Note` entails.
+    var tag: String /// repersents the color tag of the note  :TODO need to change to color from string
+    var createdAt: String /// reperents the date of creation of the note  : TODO: need to change to UNIX time stamp from string
+    var summery: String /// reperents the little summer of the note
+    var body: String /// reperents the whole note body
+}
+
 extension Note {
     var user: Parent<Note, User> {
         return parent(\.authorID)

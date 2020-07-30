@@ -18,19 +18,23 @@ final class Token: SQLiteModel {
     var token: String
     var userID: User.ID
     
-    init(token: String,
-         userID: User.ID) {
-        
+    init(token: String, userID: User.ID) {
         self.token = token
         self.userID = userID
     }
     
     init(_ user: User) throws {
-        let token = "" //TODO: Replace with OSRandom().data(count: 16).base64EncodingString() 
-        self.token = token
+        /* TODO:
+         1. Replace with OSRandom().data(count: 16).base64EncodingString() - Done but test and verify
+         2. Check the is using the uuid is correct thing or not
+         */
+        if let token = try? CryptoRandom().generateData(count: 16).base64EncodedString() {
+            self.token = token
+        } else {
+            self.token = UUID().uuidString
+        }
         self.userID = try user.requireID()
     }
-
 }
 
 extension Token {
@@ -38,6 +42,19 @@ extension Token {
         return parent(\.id)!  //TODD: Need to verify this
     }
 }
+
+extension Token: Authentication.Token {
+    static var tokenKey: TokenKey {
+        return \Token.token
+    }
+    
+    static let userIDKey: UserIDKey = \Token.userID
+    typealias UserType = User
+}
+
+//extension BearerAuthenticatable {
+//    static let tokenkey: TokenKey = \Token.token
+//}
 
 /// Allows `Token` to be used as a dynamic migration.
 extension Token: Migration { }
