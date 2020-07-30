@@ -12,12 +12,28 @@ final class NoteController: RouteCollection {
     func boot(router: Router) throws {
         let noteRouter = router.grouped("notes")
         noteRouter.get("/", use: index)
-        noteRouter.post("/", use: create)
         noteRouter.get(Note.parameter, use: show)
         noteRouter.delete(Note.parameter, use: delete)
-        noteRouter.patch(Note.parameter, use: update)
-        //notes/:id/user
+        noteRouter.patch(Note.parameter, use: update)        
         noteRouter.get(Note.parameter, "user", use: showUser)
+        
+        let tokenAuthMiddleWare = User.tokenAuthMiddleware()
+        let tokenGroup = noteRouter.grouped(tokenAuthMiddleWare)
+        tokenGroup.post("/", use: authNoteCreate)
+    }
+    
+    func authNoteCreate(_ req: Request) throws -> Future<Note> {
+        return try req.content.decode(NoteData.self).map(to: Note.self) { note in
+            let user = try req.requireAuthenticated(User.self)
+            let savedNote = Note(title: note.title,
+                                 tag: note.tag,
+                                 summery: note.summery,
+                                 createdAt: note.createdAt,
+                                 body: note.body,
+                                 authorID: user.id!)
+            _ = savedNote.save(on: req)
+            return savedNote
+        }
     }
     
     /// Returns a list of all `Note`s.
@@ -31,12 +47,11 @@ final class NoteController: RouteCollection {
     }
 
     /// Saves a decoded `Note` to the database.
-    func create(_ req: Request) throws -> Future<Note> {
-        return try req.content.decode(Note.self).flatMap { Note in
-            //#WARNING: need to verify the issue with create and save method
-            return Note.create(on: req)
-        }
-    }
+//    func create(_ req: Request) throws -> Future<Note> {
+//        return try req.content.decode(Note.self).flatMap { Note in
+//            return Note.create(on: req)
+//        }
+//    }
 
     /// Deletes a parameterized `Note`.
     func delete(_ req: Request) throws -> Future<HTTPStatus> {

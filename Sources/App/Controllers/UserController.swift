@@ -29,7 +29,7 @@ final class UserController: RouteCollection {
     func loginHandler(_ req: Request) throws -> Future<Token> {
         let user = try req.requireAuthenticated(User.self)
         let token = try Token(user)
-        return token.create(on: req)
+        return token.save(on: req)
     }
     
     func handleUserNotes(_ req: Request) throws -> Future<[Note]> {
@@ -48,12 +48,14 @@ final class UserController: RouteCollection {
         2. https://www.vaporforums.io/viewThread/45#:~:text=In%20Vapor%203%2C%20if%20you,Future%20. very good resource.
     */
     func create(_ req: Request) throws -> Future<User.PublicUser> {
-        return try req.content.decode(User.self).flatMap(to: User.PublicUser.self, { user in
-            return user.create(on: req).map(to: User.PublicUser.self) { savedUser in
-                let publicUser = User.PublicUser(user: user) 
-                return publicUser
-            }
-        })
+        return try req.content.decode(User.self).map(to: User.PublicUser.self) { user in
+            let hasher = try req.make(BCryptDigest.self)
+            let hashedPassword = try hasher.hash(user.password)
+            user.password = hashedPassword
+            _ = user.create(on: req)
+            let publicUser = User.PublicUser(user: user)
+            return publicUser
+        }        
     }
     
     func showNotes(_ req: Request) throws -> Future<[Note]> {
