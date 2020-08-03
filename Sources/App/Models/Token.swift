@@ -5,14 +5,13 @@
 //  Created by Anilkumar kotur on 16/07/20.
 //
 
-import FluentSQLite
+import FluentMySQL
 import Vapor
 import Authentication
-import FluentSQLite
 import Crypto
 
-final class Token: SQLiteModel {
-    typealias Database = SQLiteDatabase
+final class Token: MySQLModel {
+    typealias Database = MySQLDatabase
     
     var id: Int?
     var token: String
