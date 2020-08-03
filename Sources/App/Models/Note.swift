@@ -5,12 +5,12 @@
 //  Created by Anilkumar kotur on 21/06/20.
 //
 
-import FluentSQLite
+import FluentMySQL
 import Vapor
 
 /// A single entry of a Note list.
-final class Note: SQLiteModel {
-    typealias Database = SQLiteDatabase
+final class Note: MySQLModel {
+    typealias Database = MySQLDatabase
     
     var id: Int? /// The unique identifier for this `Note`.
     var title: String /// A title describing what this `Note` entails.

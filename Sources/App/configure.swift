@@ -1,4 +1,4 @@
-import FluentSQLite
+import FluentMySQL
 import Vapor
 import Leaf
 import Authentication
@@ -6,7 +6,7 @@ import Authentication
 /// Called before your application initializes.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
     // Register providers first
-    try services.register(FluentSQLiteProvider())
+    try services.register(FluentMySQLProvider())
     try services.register(AuthenticationProvider())
 
     // Register routes to the router
@@ -16,25 +16,38 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     // Register middleware
     var middlewares = MiddlewareConfig() // Create _empty_ middleware config
-    // middlewares.use(FileMiddleware.self) // Serves files from `Public/` directory
+    middlewares.use(FileMiddleware.self) // Serves files from `Public/` directory
     middlewares.use(ErrorMiddleware.self) // Catches errors and converts to HTTP response
     services.register(middlewares)
 
-    // Configure a SQLite database
     let dicConfig = DirectoryConfig.detect()
     services.register(dicConfig)
-    let sqlite = try SQLiteDatabase(storage: .file(path: "\(dicConfig.workDir)NotesApp.db"))
-
-    // Register the configured SQLite database to the database config.
+//================================================================
+    
+    // Configure a MySQL database
+    
     var databases = DatabasesConfig()
-    databases.add(database: sqlite, as: .sqlite)
+    /// ### https://stackoverflow.com/questions/54304666/mysql-vapor-3-unrecognized-basic-packet-full-auth-not-supported
+    let mySQLDatabaseConfig = MySQLDatabaseConfig(
+        hostname: "localhost",
+        username: "anil",
+        password: "kotur",
+        database: "ournotes",
+        transport: MySQLTransportConfig.unverifiedTLS
+    )
+    
+    let mysqlDB = MySQLDatabase(config: mySQLDatabaseConfig)
+    databases.add(database: mysqlDB, as: .mysql)
     services.register(databases)
+//================================================================
+    // Register the configured SQLite database to the database config.
+    
 
     // Configure migrations
     var migrations = MigrationConfig()
-    migrations.add(model: Note.self, database: .sqlite)
-    migrations.add(model: User.self, database: .sqlite)
-    migrations.add(model: Token.self, database: .sqlite)
+    migrations.add(model: Note.self, database: .mysql)
+    migrations.add(model: User.self, database: .mysql)
+    migrations.add(model: Token.self, database: .mysql)
     services.register(migrations)
-    User.PublicUser.defaultDatabase = .sqlite
+    User.PublicUser.defaultDatabase = .mysql
 }

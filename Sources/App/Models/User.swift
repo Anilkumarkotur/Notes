@@ -5,12 +5,12 @@
 //  Created by Anilkumar kotur on 28/06/20.
 //
 
-import FluentSQLite
+import FluentMySQL
 import Vapor
 import Authentication
 
-final class User: SQLiteModel {
-    typealias Database = SQLiteDatabase
+final class User: MySQLModel {
+    typealias Database = MySQLDatabase
     
     var id: Int?
     var name: String
@@ -71,7 +71,7 @@ extension User {
     }
 }
 
-extension User.PublicUser: SQLiteModel {
+extension User.PublicUser: MySQLModel {
     static let entity = User.entity
 }
 
