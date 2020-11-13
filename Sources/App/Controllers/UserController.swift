@@ -15,12 +15,12 @@ final class UserController: RouteCollection {
         let userRouter = router.grouped("users")
         userRouter.get("/", use: index)
         userRouter.post("/", use: create)
-        //TODO: NEED to resolve the PublicUser.parameter issue
         userRouter.get(User.parameter, "notes", use: showNotes)
+        userRouter.post("login", use: loginHandler)
         
         let basicAuthMiddleWare = User.basicAuthMiddleware(using: BCryptDigest())
         let authGroup = userRouter.grouped(basicAuthMiddleWare)
-        authGroup.post("login", use: loginHandler)
+        
         
         let tokenAuthMiddleWare = User.tokenAuthMiddleware()
         let tokenGroup = userRouter.grouped(tokenAuthMiddleWare)
