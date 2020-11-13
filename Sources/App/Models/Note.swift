@@ -5,14 +5,14 @@
 //  Created by Anilkumar kotur on 21/06/20.
 //
 
-import FluentMySQL
+import FluentPostgreSQL
 import Vapor
 
 /// A single entry of a Note list.
-final class Note: MySQLModel {
-    typealias Database = MySQLDatabase
+final class Note: PostgreSQLModel {    
+    typealias Database = PostgreSQLDatabase
     
-    var id: Int? /// The unique identifier for this `Note`.
+    var id: Int?
     var title: String /// A title describing what this `Note` entails.
     var tag: String /// repersents the color tag of the note  :TODO need to change to color from string
     var createdAt: String /// reperents the date of creation of the note  : TODO: need to change to UNIX time stamp from string
@@ -46,11 +46,9 @@ extension Note {
     }
 }
 
-/// Allows `Note` to be used as a dynamic migration.
-extension Note: Migration { }
+extension Note: Content {}
 
-/// Allows `Note` to be encoded to and decoded from HTTP messages.
-extension Note: Content { }
+extension Note: Migration {}
 
 /// Allows `Note` to be used as a dynamic parameter in route definitions.
 extension Note: Parameter { }
