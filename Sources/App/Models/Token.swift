@@ -5,13 +5,13 @@
 //  Created by Anilkumar kotur on 16/07/20.
 //
 
-import FluentMySQL
+import FluentPostgreSQL
 import Vapor
 import Authentication
 import Crypto
 
-final class Token: MySQLModel {
-    typealias Database = MySQLDatabase
+final class Token: PostgreSQLModel {
+    typealias Database = PostgreSQLDatabase
     
     var id: Int?
     var token: String

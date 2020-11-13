@@ -5,12 +5,12 @@
 //  Created by Anilkumar kotur on 28/06/20.
 //
 
-import FluentMySQL
+import FluentPostgreSQL
 import Vapor
 import Authentication
 
-final class User: MySQLModel {
-    typealias Database = MySQLDatabase
+final class User: PostgreSQLModel {
+    typealias Database = PostgreSQLDatabase
     
     var id: Int?
     var name: String
@@ -36,6 +36,7 @@ final class User: MySQLModel {
     }
     
     final public class PublicUser: Content {
+        
         var id: Int?
         var name: String
         var profilePic: String
@@ -71,11 +72,9 @@ extension User {
     }
 }
 
-extension User.PublicUser: MySQLModel {
+extension User.PublicUser: PostgreSQLModel {
     static let entity = User.entity
 }
-
-extension User.PublicUser: Parameter { }
 
 /// Allows `User` to be used as a dynamic migration.
 extension User: Migration { }

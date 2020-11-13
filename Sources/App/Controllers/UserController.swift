@@ -15,7 +15,8 @@ final class UserController: RouteCollection {
         let userRouter = router.grouped("users")
         userRouter.get("/", use: index)
         userRouter.post("/", use: create)
-        userRouter.get(User.PublicUser.parameter, "notes", use: showNotes)
+        //TODO: NEED to resolve the PublicUser.parameter issue
+        userRouter.get(User.parameter, "notes", use: showNotes)
         
         let basicAuthMiddleWare = User.basicAuthMiddleware(using: BCryptDigest())
         let authGroup = userRouter.grouped(basicAuthMiddleWare)
