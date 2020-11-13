@@ -26,9 +26,9 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var databases = DatabasesConfig()
     
     var postgreSQLDatabase: PostgreSQLDatabase
-    
+        
     if env.isRelease {
-        guard let dbURL = Environment.get("DATABASE_URL"), let prodConfig = PostgreSQLDatabaseConfig(url: dbURL) else {
+        guard let dbURL = Environment.get("DATABASE_URL"), let prodConfig = PostgreSQLDatabaseConfig(url: url, transport: .unverifiedTLS) else {
             print("Unable to fetch the database url")
             return
         }        
