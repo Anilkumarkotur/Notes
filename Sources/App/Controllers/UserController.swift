@@ -16,11 +16,11 @@ final class UserController: RouteCollection {
         userRouter.get("/", use: index)
         userRouter.post("/", use: create)
         userRouter.get(User.parameter, "notes", use: showNotes)
-        userRouter.post("login", use: loginHandler)
+        
         
         let basicAuthMiddleWare = User.basicAuthMiddleware(using: BCryptDigest())
         let authGroup = userRouter.grouped(basicAuthMiddleWare)
-        
+        authGroup.post("login", use: loginHandler)
         
         let tokenAuthMiddleWare = User.tokenAuthMiddleware()
         let tokenGroup = userRouter.grouped(tokenAuthMiddleWare)
