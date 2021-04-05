@@ -5,7 +5,7 @@
 //  Created by Anilkumar kotur on 21/06/20.
 //
 
-import FluentPostgreSQL
+import FluentPostgresDriver
 import Vapor
 
 /// A single entry of a Note list.

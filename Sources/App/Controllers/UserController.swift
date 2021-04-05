@@ -6,8 +6,6 @@
 //
 
 import Vapor
-import Crypto
-import Authentication
 
 /// Controls basic CRUD operations on `User`s.
 final class UserController: RouteCollection {

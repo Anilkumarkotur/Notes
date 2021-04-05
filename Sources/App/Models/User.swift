@@ -5,9 +5,9 @@
 //  Created by Anilkumar kotur on 28/06/20.
 //
 
-import FluentPostgreSQL
+import FluentPostgresDriver
 import Vapor
-import Authentication
+
 
 final class User: PostgreSQLModel {
     typealias Database = PostgreSQLDatabase

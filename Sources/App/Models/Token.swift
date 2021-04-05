@@ -5,10 +5,9 @@
 //  Created by Anilkumar kotur on 16/07/20.
 //
 
-import FluentPostgreSQL
+import FluentPostgresDriver
 import Vapor
-import Authentication
-import Crypto
+
 
 final class Token: PostgreSQLModel {
     typealias Database = PostgreSQLDatabase
